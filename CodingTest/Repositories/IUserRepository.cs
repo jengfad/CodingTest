@@ -10,5 +10,6 @@ namespace CodingTest.Repositories
         void AddUser(User user);
         void UpdateUser(User user);
         void DeleteUser(int id);
+        int GetTotalUserCount(string searchText);
     }
 }

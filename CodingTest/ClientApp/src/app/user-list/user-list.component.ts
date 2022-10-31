@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from '../core/services/user.service';
 import { UserModel } from '../models/user.model';
 
@@ -12,6 +12,7 @@ export class UserListComponent {
   itemsPerPage = 10;
   page = 1;
   totalItems = 0;
+  searchText = "";
 
   constructor(private userService: UserService) {
   }
@@ -20,20 +21,20 @@ export class UserListComponent {
     this.getUsers(this.page);
   }
 
+  onSearch(): void {
+    this.onPageChange(1);
+  }
+
   onPageChange(page: number): void {
     this.getUsers(page);
     this.page = page;
   }
 
   getUsers(page: number): void {
-    this.userService.getUsers(page, this.itemsPerPage, null).subscribe(result => {
-      this.users = result;
-      this.totalItems = 1000;
+    this.userService.getUsers(page, this.itemsPerPage, this.searchText).subscribe(result => {
+      this.users = result.users;
+      this.totalItems = result.totalItems;
     });
-  }
-
-  editUser(user: UserModel): void {
-
   }
 
   deleteUser(user: UserModel) {

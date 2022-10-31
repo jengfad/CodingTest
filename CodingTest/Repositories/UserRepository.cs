@@ -24,9 +24,11 @@ namespace CodingTest.Repositories
 
         public IEnumerable<User> GetUsers(int pageNumber, int pageSize, string searchText)
         {
+            var skipRecords = (pageNumber - 1) * pageSize;
             return _dataContext.Users
                 .Where(user => user.IsUserMatch(searchText))
-                .Skip(pageNumber).Take(pageSize);
+                .Skip(skipRecords)
+                .Take(pageSize);
         }
 
         public void AddUser(User user)
@@ -38,6 +40,11 @@ namespace CodingTest.Repositories
         private int GetNewUserId()
         {
             return _dataContext.Users.Count + 1;
+        }
+
+        public int GetTotalUserCount(string searchText)
+        {
+            return _dataContext.Users.Where(user => user.IsUserMatch(searchText)).Count();
         }
 
         public void UpdateUser(User user)

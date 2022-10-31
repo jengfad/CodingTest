@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { PagedUsersModel } from "src/app/models/paged-users.model";
 import { UserModel } from "src/app/models/user.model";
 
 @Injectable({
@@ -19,12 +20,12 @@ export class UserService {
         return this.http.get<UserModel>(`${this.baseUrl}/${id}`);
     }
 
-    getUsers(pageNumber: number, pageSize: number, searchText: string): Observable<UserModel[]> {
+    getUsers(pageNumber: number, pageSize: number, searchText: string): Observable<PagedUsersModel> {
         let args = { pageNumber: pageNumber, pageSize: pageSize };
         if (searchText) {
            args['searchText'] = searchText;
         }
-        return this.http.get<UserModel[]>(`${this.baseUrl}`, { params: args });
+        return this.http.get<PagedUsersModel>(`${this.baseUrl}`, { params: args });
     }
 
     getAllUsers(): Observable<UserModel[]> {

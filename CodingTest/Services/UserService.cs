@@ -22,16 +22,12 @@ namespace CodingTest.Services
             return _mapper.Map<User, UserDto>(user);
         }
 
-        public IEnumerable<UserDto> GetUsers()
-        {
-            var users = _userRepository.GetUsers();
-            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
-        }
-
-        public IEnumerable<UserDto> GetUsers(int pageNumber, int pageSize, string searchText)
+        public PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText)
         {
             var users = _userRepository.GetUsers(pageNumber, pageSize, searchText);
-            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
+            var usersDto = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
+            var count = _userRepository.GetTotalUserCount(searchText);
+            return new PagedUsersDto { Users = usersDto, TotalItems = count };
         }
 
         public void AddUser(UserDto dto)

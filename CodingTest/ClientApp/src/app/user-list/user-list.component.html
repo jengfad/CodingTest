@@ -1,6 +1,15 @@
 <div class="card">
   <div class="card-header">User List</div>
   <div class="card-body d-flex flex-column align-items-center">
+    <div class="align-self-start d-flex align-items-center">
+      <div>
+        <button [routerLink]="['/user', 0]" class="btn btn-link">+ Add User</button>
+      </div>
+      <div>
+        <input [(ngModel)]="searchText" type="text" />
+        <button (click)="onSearch()" class="btn btn-primary">Search</button>
+      </div>
+    </div>
     <table *ngIf="users.length > 0" class="w-100">
       <thead>
         <tr>
