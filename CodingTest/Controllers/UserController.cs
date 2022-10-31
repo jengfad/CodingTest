@@ -16,9 +16,10 @@ namespace CodingTest.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> Get()
+        public ActionResult<IEnumerable<UserDto>> Get(
+            [FromQuery]int pageNumber, [FromQuery] int pageSize, [FromQuery] string? searchText = null)
         {
-            var result = _userService.GetUsers();
+            var result = _userService.GetUsers(pageNumber, pageSize, searchText);
             return Ok(result);
         }
 

@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserFormResolver } from './user-form/user-form.resolver';
 import { UserListComponent } from './user-list/user-list.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { UserListComponent } from './user-list/user-list.component';
     HttpClientModule,
     FormsModule,
 		ReactiveFormsModule,
+    NgxPaginationModule,
     RouterModule.forRoot([
       { 
         path: '',

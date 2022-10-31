@@ -25,18 +25,8 @@ namespace CodingTest.Repositories
         public IEnumerable<User> GetUsers(int pageNumber, int pageSize, string searchText)
         {
             return _dataContext.Users
-                .Where(user => IsUserMatch(user, searchText))
+                .Where(user => user.IsUserMatch(searchText))
                 .Skip(pageNumber).Take(pageSize);
-        }
-
-        private static bool IsUserMatch(User user, string searchText)
-        {
-            if (string.IsNullOrWhiteSpace(searchText)) return true;
-
-            var searchTextLower = searchText.ToLower();
-            return user.Email.ToLower().Contains(searchTextLower)
-                    || user.FirstName.ToLower().Contains(searchTextLower)
-                    || user.LastName.ToLower().Contains(searchTextLower);
         }
 
         public void AddUser(User user)

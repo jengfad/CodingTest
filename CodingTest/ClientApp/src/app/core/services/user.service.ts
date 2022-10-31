@@ -19,6 +19,14 @@ export class UserService {
         return this.http.get<UserModel>(`${this.baseUrl}/${id}`);
     }
 
+    getUsers(pageNumber: number, pageSize: number, searchText: string): Observable<UserModel[]> {
+        let args = { pageNumber: pageNumber, pageSize: pageSize };
+        if (searchText) {
+           args['searchText'] = searchText;
+        }
+        return this.http.get<UserModel[]>(`${this.baseUrl}`, { params: args });
+    }
+
     getAllUsers(): Observable<UserModel[]> {
         return this.http.get<UserModel[]>(`${this.baseUrl}`);
     }

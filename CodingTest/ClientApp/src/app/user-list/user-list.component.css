@@ -1,0 +1,11 @@
+td, th {
+    padding: 10px;
+}
+
+button {
+    margin: 10px;
+}
+
+div.page-controls-wrapper {
+    margin: 20px;
+}
