@@ -1,0 +1,16 @@
+.form-group {
+    margin: 30px 20px 30px 20px;
+    max-width: 400px;
+}
+
+div.actions {
+    margin: 50px 20px 20px 20px;
+}
+
+button {
+    margin-right: 20px;
+}
+
+.form-group.gender label {
+    margin-right: 15px;
+}

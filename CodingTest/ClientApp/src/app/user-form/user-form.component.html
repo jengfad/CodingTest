@@ -1,35 +1,53 @@
-<h1 *ngIf="!isEdit">Add User</h1>
-<h1 *ngIf="isEdit">Edit User</h1>
-<form [formGroup]="formGroup" (submit)="save()">
-    <div class="form-group row">
-        <label for="email" class="col-sm-2 col-form-label required">Email</label>
-        <div class="col-sm-6">
-            <input type="text" formControlName="email" class="form-control"
-                placeholder="Enter email address" required />
-            <div class="text-danger" *ngIf="email.touched && email.errors">
-                <label *ngIf="email.errors['required']">Required</label>
+<div class="card">
+    <div class="card-header">{{title}}</div>
+    <div class="card-body">
+        <form [formGroup]="formGroup" (submit)="save()">
+            <div class="form-group">
+                <label for="email" class="required">Email</label>
+                <div>
+                    <input id="email" type="text" formControlName="email" class="form-control"
+                        placeholder="Enter email address" required />
+                    <div class="text-danger" *ngIf="email.touched && email.errors">
+                        <label *ngIf="email.errors['required']">Required</label>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="firstName" class="col-sm-2 col-form-label required">First Name</label>
-        <div class="col-sm-6">
-            <input type="text" formControlName="firstName" class="form-control"
-                placeholder="Enter first name" required />
-            <div class="text-danger" *ngIf="firstName.touched && firstName.errors">
-                <label *ngIf="firstName.errors['required']">Required</label>
+            <div class="form-group">
+                <label for="firstName" class="required">First Name</label>
+                <div>
+                    <input id="firstName" type="text" formControlName="firstName" class="form-control"
+                        placeholder="Enter first name" required />
+                    <div class="text-danger" *ngIf="firstName.touched && firstName.errors">
+                        <label *ngIf="firstName.errors['required']">Required</label>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="lastName" class="col-sm-2 col-form-label required">Last Name</label>
-        <div class="col-sm-6">
-            <input type="text" formControlName="lastName" class="form-control"
-                placeholder="Enter last name" required />
-            <div class="text-danger" *ngIf="lastName.touched && lastName.errors">
-                <label *ngIf="lastName.errors['required']">Required</label>
+            <div class="form-group">
+                <label for="lastName" class="required">Last Name</label>
+                <div>
+                    <input id="lastName" type="text" formControlName="lastName" class="form-control"
+                        placeholder="Enter last name" required />
+                    <div class="text-danger" *ngIf="lastName.touched && lastName.errors">
+                        <label *ngIf="lastName.errors['required']">Required</label>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="form-group d-flex gender">
+                <label for="gender">Gender</label>
+                <div>
+                    <select formControlName="gender" id="gender">
+                        <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <label for="status" class="form-check-label">Status (Active)</label>
+                <input id="status" type="checkbox" formControlName="status" class="form-check-input"/>    
+            </div>
+            <div class="actions d-flex">
+              <button type="button" class="btn btn-secondary">Cancel</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
-    <button type="submit" class="btn btn-success mr-2">Submit</button>
-</form>
+</div>

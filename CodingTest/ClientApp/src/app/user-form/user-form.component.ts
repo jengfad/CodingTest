@@ -12,20 +12,22 @@ import { UserModel } from '../models/user.model';
 export class UserFormComponent implements OnInit {
 
   userData = this.route.snapshot.data['user'];
-	formGroup: FormGroup;
+  formGroup: FormGroup;
+  isEdit = this.userData;
+  title = this.isEdit ? 'Edit User' : 'Add User';
 
-	get firstName() { return this.formGroup.get('firstName') as FormControl; }
-	get lastName() { return this.formGroup.get('lastName') as FormControl; }
-	get email() { return this.formGroup.get('email') as FormControl; }
-	get gender() { return this.formGroup.get('gender') as FormControl; }
-	get status() { return this.formGroup.get('status') as FormControl; }
-	get id() { return this.formGroup.get('id') as FormControl; }
-  
-  get isEdit() { return this.userData }
+  genders = ['Male', 'Female'];
+
+  get firstName() { return this.formGroup.get('firstName') as FormControl; }
+  get lastName() { return this.formGroup.get('lastName') as FormControl; }
+  get email() { return this.formGroup.get('email') as FormControl; }
+  get gender() { return this.formGroup.get('gender') as FormControl; }
+  get status() { return this.formGroup.get('status') as FormControl; }
+  get id() { return this.formGroup.get('id') as FormControl; }
   
   constructor(
     private userService: UserService,
-		private fb: FormBuilder,
+    private fb: FormBuilder,
     private route: ActivatedRoute) {
   }
 
@@ -44,13 +46,13 @@ export class UserFormComponent implements OnInit {
 
   private initForm(): void {
     this.formGroup = this.fb.group({
-			firstName: [null, [Validators.required]],
-			lastName: [null, [Validators.required]],
-			email: [null, [Validators.required]],
-      gender: [null],
+      firstName: [null, [Validators.required]],
+      lastName: [null, [Validators.required]],
+      email: [null, [Validators.required]],
+      gender: [this.genders[0]],
       status: [false],
       id: [0]
-		});
+    });
   }
 
   private populateForm(): void {
