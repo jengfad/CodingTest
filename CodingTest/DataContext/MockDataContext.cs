@@ -13,7 +13,7 @@ namespace CodingTest.DataContext
         public MockDataContext()
         {
             SeedUserData();
-            CurrentIdentity = Users.Count;
+            CurrentIdentity = GetTotal();
         }
 
         public int GetUserIdentity()
@@ -24,6 +24,11 @@ namespace CodingTest.DataContext
         public void IncrementIdentity()
         {
             CurrentIdentity++;
+        }
+
+        public int GetTotal()
+        {
+            return Users.Count;
         }
 
         private void SeedUserData()

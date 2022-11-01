@@ -9,5 +9,7 @@ namespace CodingTest.DataContext
         int GetUserIdentity();
 
         void IncrementIdentity();
+
+        int GetTotal();
     }
 }
