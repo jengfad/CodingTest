@@ -174,12 +174,10 @@ namespace CodingTest.Tests.Repositories
 
             var usersFromDb = _userRepository.GetUsers(filters);
 
-            Assert.Equal(3, usersFromDb.Count());
-            foreach (var userFromDb in usersFromDb)
-            {
-                var userMatch = addedUsers.Where(u => u.Email == userFromDb.Email);
-                Assert.NotNull(userMatch);
-            }
+            var expectedEmails = addedUsers.Select(user => user.Email);
+            var actualEmails = usersFromDb.Select(u => u.Email);
+
+            Assert.True(expectedEmails.SequenceEqual(actualEmails));
         }
 
 
@@ -190,7 +188,7 @@ namespace CodingTest.Tests.Repositories
             {
                 new User
                 {
-                    LastName = "zzzzz1"
+                    LastName = "zzzzz3"
                 },
                 new User
                 {
@@ -198,7 +196,7 @@ namespace CodingTest.Tests.Repositories
                 },
                 new User
                 {
-                    LastName = "zzzzz3"
+                    LastName = "zzzzz1"
                 }
             };
 
@@ -218,12 +216,10 @@ namespace CodingTest.Tests.Repositories
 
             var usersFromDb = _userRepository.GetUsers(filters);
 
-            Assert.Equal(3, usersFromDb.Count());
-            foreach (var userFromDb in usersFromDb)
-            {
-                var userMatch = addedUsers.Where(u => u.LastName == userFromDb.LastName);
-                Assert.NotNull(userMatch);
-            }
+            var expectedLastNames = addedUsers.Select(user => user.LastName);
+            var actualLastNames = usersFromDb.Select(u => u.LastName);
+
+            Assert.True(expectedLastNames.SequenceEqual(actualLastNames));
         }
 
         [Fact]
@@ -268,12 +264,27 @@ namespace CodingTest.Tests.Repositories
 
             var usersFromDb = _userRepository.GetUsers(filters);
 
-            Assert.Equal(3, usersFromDb.Count());
-            foreach (var userFromDb in usersFromDb)
+            var expectedFirstNames = addedUsers.Select(user => user.FirstName);
+            var actualFirstNames = usersFromDb.Select(u => u.FirstName);
+
+            Assert.True(expectedFirstNames.SequenceEqual(actualFirstNames));
+        }
+
+        [Fact]
+        public void It_Should_Not_Return_Users_For_Non_Existing_Filters()
+        {
+            var filters = new UserFilter
             {
-                var userMatch = addedUsers.Where(u => u.FirstName == userFromDb.FirstName);
-                Assert.NotNull(userMatch);
-            }
+                PageNumber = 1,
+                PageSize = 3,
+                SearchText = "Daenerys Stormborn of House Targaryen, the First of Her Name",
+                SortBy = "FirstName",
+                SortDirection = "ASC"
+            };
+
+            var usersFromDb = _userRepository.GetUsers(filters);
+
+            Assert.Equal(0, usersFromDb.Count());
         }
     }
 }
