@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from 'src/app/core/services/user.service';
-import { UserModel } from 'src/app/models/user.model';
+import { UserModel } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'app-user-list',
@@ -38,8 +38,11 @@ export class UserListComponent {
   }
 
   deleteUser(user: UserModel) {
-    alert(`Are you sure you want to delete ${user.email}?`);
-    this.userService.deleteUser(user.id).subscribe();
-    alert('user deleted');
+    var confirm = window.confirm(`Delete ${user.email}?`);
+    if (!confirm) return;
+
+    this.userService.deleteUser(user.id).subscribe(() => {
+      alert(`${user.email} successfully deleted!`);
+    });
   }
 }

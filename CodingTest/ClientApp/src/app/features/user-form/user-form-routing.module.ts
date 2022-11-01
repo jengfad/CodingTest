@@ -11,7 +11,7 @@ const routes: Routes = [
     {
 		path: ':userId',
 		component: UserFormComponent,
-        resolve: { userData: UserFormResolver }
+        resolve: { user: UserFormResolver }
 	}
 ]
 

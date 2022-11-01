@@ -1,5 +1,6 @@
 td, th {
     padding: 10px;
+    vertical-align: middle;
 }
 
 button {
@@ -8,4 +9,9 @@ button {
 
 div.page-controls-wrapper {
     margin: 20px;
+}
+
+.search-filters .filter {
+    margin: 0 30px 0 10px;
+
 }

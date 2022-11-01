@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
-import { UserModel } from 'src/app/models/user.model';
+import { UserModel } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'app-user-form',
@@ -28,6 +28,7 @@ export class UserFormComponent implements OnInit {
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
+    private router: Router,
     private route: ActivatedRoute) {
   }
 
@@ -40,7 +41,8 @@ export class UserFormComponent implements OnInit {
     const model = this.mapFormToModel();
     const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
     saveTask.subscribe(() => {
-      alert("Record saved")
+      alert(`User successfully saved!`);
+      this.router.navigate(['/']);
     });
   }
 

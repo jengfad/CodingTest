@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { PagedUsersModel } from "src/app/models/paged-users.model";
-import { UserModel } from "src/app/models/user.model";
+import { PagedUsersModel } from "src/app/shared/models/paged-users.model";
+import { UserModel } from "src/app/shared/models/user.model";
 
 @Injectable({
     providedIn: 'root'
