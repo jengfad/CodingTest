@@ -9,5 +9,9 @@ export const AppConstants = {
     SORT_DIRECTION : {
         ASC: 'ASC',
         DESC: 'DESC'
-    }
+    },
+    GENDERS: [
+        'Male',
+        'Female'
+    ]
 }

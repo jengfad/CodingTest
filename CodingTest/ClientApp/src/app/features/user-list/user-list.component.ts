@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, debounce, debounceTime, Observable, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, tap } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
 import { UserModel } from 'src/app/shared/models/user.model';
 import { AppConstants } from 'src/app/shared/app-constants';

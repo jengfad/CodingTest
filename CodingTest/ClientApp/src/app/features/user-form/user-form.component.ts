@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { AppConstants } from 'src/app/shared/app-constants';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import { EmailFormatValidator, } from 'src/app/shared/form-validators/email-format.validator';
 import { UniqueEmailValidator } from 'src/app/shared/form-validators/unique-email.validator';
@@ -21,7 +22,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   isEdit = this.userData;
   title = this.isEdit ? 'Edit User' : 'Add User';
 
-  genders = ['Male', 'Female'];
+  genders = AppConstants.GENDERS;
 
   get firstName() { return this.formGroup.get('firstName') as UntypedFormControl; }
   get lastName() { return this.formGroup.get('lastName') as UntypedFormControl; }
