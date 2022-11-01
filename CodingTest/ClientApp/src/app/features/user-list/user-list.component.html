@@ -13,7 +13,7 @@
       </div>
     </div>
     <br/>
-    <div *ngIf="users.length > 0; else no_records" class="w-100 d-flex flex-column align-items-center">
+    <div *ngIf="(pagedUsers$ | async)?.users.length > 0; else no_records" class="w-100 d-flex flex-column align-items-center">
       <table class="table table-bordered w-100">
         <thead class="thead-secondary">
           <tr>
@@ -26,7 +26,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
+          <tr *ngFor="let user of (pagedUsers$ | async)?.users | paginate : 
+              { itemsPerPage: ( filters$ | async )?.pageSize, 
+                currentPage: ( filters$ | async )?.pageNumber, 
+                totalItems: (pagedUsers$ | async)?.totalItems }">
             <td>{{user.firstName}}</td>
             <td>{{user.lastName}}</td>
             <td>{{user.email}}</td>

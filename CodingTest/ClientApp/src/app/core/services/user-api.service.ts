@@ -2,13 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { PagedUsersModel } from "src/app/shared/models/paged-users.model";
-import { UserSearchModel } from "src/app/shared/models/user-search.model";
 import { UserModel } from "src/app/shared/models/user.model";
+import { PagedUsersParams } from "../state/user";
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserService {
+export class UserApiService {
     private baseUrl: string;
 	constructor(
 		private http: HttpClient,
@@ -26,7 +26,7 @@ export class UserService {
         return this.http.get<UserModel>(url);
     }
 
-    getUsers(params: UserSearchModel): Observable<PagedUsersModel> {
+    getUsers(params: PagedUsersParams): Observable<PagedUsersModel> {
         const { pageNumber: pageNumber, 
             pageSize: pageSize, 
             searchText: searchText, 

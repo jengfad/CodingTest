@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, debounceTime, takeUntil, tap } from 'rxjs';
-import { DialogService, UserService } from 'src/app/core/services';
+import { combineLatest, debounceTime, switchMap, takeUntil, tap } from 'rxjs';
+import { DialogService } from 'src/app/core/services';
+import { PagedUsersParams, UserQuery } from 'src/app/core/state/user';
+import { UserService } from 'src/app/core/state/user/user.service';
 import { AppConstants } from 'src/app/shared/app-constants';
 import { BaseComponent } from 'src/app/shared/components';
-import { UserModel, UserSearchModel } from 'src/app/shared/models';
+import { UserModel } from 'src/app/shared/models';
 
 @Component({
   selector: 'app-user-list',
@@ -11,77 +13,74 @@ import { UserModel, UserSearchModel } from 'src/app/shared/models';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent extends BaseComponent {
+
   readonly SORT_BY_TYPES = AppConstants.SORT_BY_TYPES;
   readonly SORT_DIRECTION = AppConstants.SORT_DIRECTION;
 
-  users: UserModel[] = [];
-  itemsPerPage = 10;
-  page = 1;
-  totalItems = 0;
-  searchText = "";
-  sortBy = this.SORT_BY_TYPES.EMAIL;
-  sortDirection = this.SORT_DIRECTION.ASC;
-  
-  private searchTextSubj = new BehaviorSubject('');
+  searchText = this.userQuery.filters.searchText;
+  pagedUsers$ = this.userQuery.pagedUsers$;
+  filters$ = this.userQuery.filters$;
+  page: number;
 
   constructor(
+    private userQuery: UserQuery,
     private userService: UserService,
     private dialogService: DialogService) {
       super();
   }
 
   ngOnInit(): void {
-    this.getUsers(this.page);
+    this.listenForPagedUserEvents();
+  }
 
-    this.searchTextSubj.pipe(
+  listenForPagedUserEvents(): void {
+    this.userQuery.filters$.pipe(
       takeUntil(this.ngUnsubscribe$),
-      debounceTime(500),
-      tap(() => this.onPageChange(1))
+      switchMap(filters => {
+        return this.userService.getPagedUsers(filters);
+      })
     ).subscribe();
   }
 
-  private toggleSortDirection(): void {
-    this.sortDirection = this.sortDirection === this.SORT_DIRECTION.ASC ? this.SORT_DIRECTION.DESC : this.SORT_DIRECTION.ASC;
-  }
-
-  onSort(type: string): void {
-    if (this.sortBy === type) {
-      this.toggleSortDirection();
-    } else {
-      this.sortBy = type;
+  onSort(newSortBy: string): void {
+    let sortDirection = this.SORT_DIRECTION.ASC;
+    if (this.userQuery.filters.sortBy === newSortBy) {
+      sortDirection = this.userQuery.filters.sortDirection === this.SORT_DIRECTION.ASC ? this.SORT_DIRECTION.DESC : this.SORT_DIRECTION.ASC;
     }
-    this.onPageChange(1);
+
+    const currentFilters = this.userQuery.filters;
+    this.userService.updateFilters(
+      {...currentFilters, 
+        sortBy: newSortBy,
+        sortDirection: sortDirection,
+        pageNumber: 1
+      } as PagedUsersParams);
   }
 
   onSearch(): void {
-    this.searchTextSubj.next(this.searchText);
+    const currentFilters = this.userQuery.filters;
+    this.userService.updateFilters(
+      {...currentFilters, 
+        pageNumber: 1, 
+        searchText: this.searchText
+      } as PagedUsersParams);
   }
 
   onPageChange(page: number): void {
-    this.getUsers(page);
-    this.page = page;
-  }
-
-  getUsers(page: number): void {
-    const params = { 
-      pageNumber: page, 
-      pageSize: this.itemsPerPage, 
-      searchText: this.searchText,
-      sortBy: this.sortBy,
-      sortDirection: this.sortDirection } as UserSearchModel;
-    this.userService.getUsers(params).subscribe(result => {
-      this.users = result.users;
-      this.totalItems = result.totalItems;
-    });
+    const currentFilters = this.userQuery.filters;
+    this.userService.updateFilters(
+      {...currentFilters, 
+        pageNumber: page
+      } as PagedUsersParams);
   }
 
   async deleteUser(user: UserModel) {
-    const confirm = await this.dialogService.openSimpleDialogAsync("Delete User", `Are you sure you want to delete ${user.email}?`, true);
-    if (!confirm) return;
+    // const confirm = await this.dialogService.openSimpleDialogAsync("Delete User", `Are you sure you want to delete ${user.email}?`, true);
+    // if (!confirm) return;
 
-    this.userService.deleteUser(user.id).subscribe(async () => {
-      this.onPageChange(1);
-      await this.dialogService.openSimpleDialogAsync("Delete User", `${user.email} successfully deleted!`);
-    });
+    // this.userService.deleteUser(user.id).subscribe(async () => {
+    //   this.onPageChange(1);
+    //   await this.dialogService.openSimpleDialogAsync("Delete User", `${user.email} successfully deleted!`);
+    // });
   }
 }

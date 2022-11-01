@@ -1,4 +1,5 @@
 export const AppConstants = {
+    PAGE_SIZE: 10,
     SORT_BY_TYPES: {
         EMAIL: 'Email',
         FIRST_NAME: 'FirstName',

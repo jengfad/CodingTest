@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs';
-import { DialogService, UserService } from 'src/app/core/services';
+import { DialogService, UserApiService } from 'src/app/core/services';
 import { AppConstants } from 'src/app/shared/app-constants';
 import { BaseFormComponent } from 'src/app/shared/components';
 import { EmailFormatValidator, UniqueEmailValidator } from 'src/app/shared/form-validators';
@@ -31,7 +31,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   
   constructor(
 		private dialogService: DialogService,
-    private userService: UserService,
+    private userApi: UserApiService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute) {
@@ -51,7 +51,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   async save(): Promise<void> {
     const model = this.mapFormToModel();
 
-    const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
+    const saveTask = this.isEdit ? this.userApi.updateUser(model) : this.userApi.addUser(model);
     saveTask.subscribe(async () => {
       await this.dialogService.openSimpleDialogAsync("Add User", "User successfully saved!");
       this.setHasDirtyChange(false);
@@ -62,7 +62,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   private initForm(): void {
     const emailValidators = !this.isEdit ? [
       [Validators.required, EmailFormatValidator.validate], 
-      [UniqueEmailValidator.createValidator(this.userService, this.isEdit)]
+      [UniqueEmailValidator.createValidator(this.userApi, this.isEdit)]
     ] : [];
     this.formGroup = this.fb.group({
       firstName: [null, [Validators.required]],
