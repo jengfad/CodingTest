@@ -17,9 +17,10 @@ namespace CodingTest.Controllers
 
         [HttpGet]
         public ActionResult<IEnumerable<PagedUsersDto>> Get(
-            [FromQuery]int pageNumber, [FromQuery] int pageSize, [FromQuery] string? searchText = null)
+            [FromQuery]int pageNumber, [FromQuery] int pageSize, 
+            [FromQuery] string? searchText = null, [FromQuery] string? orderBy = null, [FromQuery] string? sortDirection = null)
         {
-            var result = _userService.GetPagedUsers(pageNumber, pageSize, searchText);
+            var result = _userService.GetPagedUsers(pageNumber, pageSize, searchText, orderBy, sortDirection);
             return Ok(result);
         }
 

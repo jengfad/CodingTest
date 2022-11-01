@@ -2,7 +2,7 @@
   <div class="card-header d-flex align-items-center justify-content-between">
     <h5>User List</h5>
     <div>
-      <button [routerLink]="['/user']" class="btn btn-link">+ Add a User</button>
+      <button [routerLink]="['/user']" class="btn btn-warning">+ Add a User</button>
     </div>
   </div>
   <div class="card-body d-flex flex-column">
@@ -18,11 +18,11 @@
       <table class="table table-bordered w-100">
         <thead class="thead-secondary">
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th class="text-center">Gender</th>
-            <th class="text-center">Status</th>
+            <th (click)="sortBy(ORDER_BY_TYPES.FIRST_NAME)" class="sort-by" title="Sort by first name">First Name</th>
+            <th (click)="sortBy(ORDER_BY_TYPES.LAST_NAME)" class="sort-by" title="Sort by last name">Last Name</th>
+            <th (click)="sortBy(ORDER_BY_TYPES.EMAIL)" class="sort-by" title="Sort by email">Email</th>
+            <th (click)="sortBy(ORDER_BY_TYPES.GENDER)" class="sort-by text-center" title="Sort by gender">Gender</th>
+            <th (click)="sortBy(ORDER_BY_TYPES.STATUS)" class="sort-by text-center" title="Sort by status">Status</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>

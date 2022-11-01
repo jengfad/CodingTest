@@ -1,4 +1,5 @@
 ﻿using CodingTest.DataContext;
+using CodingTest.Extensions;
 using CodingTest.Models.Data;
 
 namespace CodingTest.Repositories
@@ -27,11 +28,12 @@ namespace CodingTest.Repositories
             return _dataContext.Users.OrderBy(u => u.Email);
         }
 
-        public IEnumerable<User> GetUsers(int pageNumber, int pageSize, string searchText)
+        public IEnumerable<User> GetUsers(int pageNumber, int pageSize, string searchText, string orderBy, string sortDirection)
         {
             var skipRecords = (pageNumber - 1) * pageSize;
             return _dataContext.Users
                 .Where(user => user.IsUserMatch(searchText))
+                .OrderByCustomParams(orderBy, sortDirection)
                 .Skip(skipRecords)
                 .Take(pageSize);
         }

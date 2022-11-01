@@ -10,7 +10,7 @@ export class UniqueEmailValidator {
         return null;
 
         return userService.getUserByEmail(emailValue).pipe(
-            map((user) => user ? {emailAlreadyExists: "Email already exists"} : null)
+            map((user) => user ? { emailAlreadyExists : "Email already exists" } : null)
         );
       };
     }

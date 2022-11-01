@@ -28,9 +28,9 @@ namespace CodingTest.Services
             return _mapper.Map<User, UserDto>(user);
         }
 
-        public PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText)
+        public PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText, string orderBy, string sortDirection)
         {
-            var users = _userRepository.GetUsers(pageNumber, pageSize, searchText);
+            var users = _userRepository.GetUsers(pageNumber, pageSize, searchText, orderBy, sortDirection);
             var usersDto = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
             var count = _userRepository.GetTotalUserCount(searchText);
             return new PagedUsersDto { Users = usersDto, TotalItems = count };

@@ -4,7 +4,7 @@ namespace CodingTest.Services
 {
     public interface IUserService
     {
-        PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText);
+        PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText, string orderBy, string sortDirection);
         UserDto GetUser(int id);
         UserDto GetUserByEmail(string email);
         void AddUser(UserDto dto);

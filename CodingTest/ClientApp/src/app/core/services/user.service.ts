@@ -25,11 +25,20 @@ export class UserService {
         return this.http.get<UserModel>(url);
     }
 
-    getUsers(pageNumber: number, pageSize: number, searchText: string): Observable<PagedUsersModel> {
+    getUsers(pageNumber: number, pageSize: number, searchText: string, orderBy: string, sortDirection: string, ): Observable<PagedUsersModel> {
         let args = { pageNumber: pageNumber, pageSize: pageSize };
         if (searchText) {
            args['searchText'] = searchText;
         }
+
+        if (orderBy) {
+            args['orderBy'] = orderBy;
+        }
+
+        if (sortDirection) {
+            args['sortDirection'] = sortDirection;
+        }
+
         return this.http.get<PagedUsersModel>(`${this.baseUrl}`, { params: args });
     }
 
