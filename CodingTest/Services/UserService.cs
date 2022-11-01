@@ -16,6 +16,12 @@ namespace CodingTest.Services
             _userRepository = userRepository;
         }
 
+        public UserDto GetUserByEmail(string email)
+        {
+            var user = _userRepository.GetUserByEmail(email);
+            return _mapper.Map<User, UserDto>(user);
+        }
+
         public UserDto GetUser(int id)
         {
             var user = _userRepository.GetUser(id);

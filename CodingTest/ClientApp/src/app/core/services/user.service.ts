@@ -13,11 +13,16 @@ export class UserService {
 		private http: HttpClient,
         @Inject('BASE_URL') baseUrl: string
 	) {
-        this.baseUrl = `${baseUrl}api/user`
+        this.baseUrl = `${baseUrl}api/users`
 	}
 
     getUser(id: number): Observable<UserModel> {
         return this.http.get<UserModel>(`${this.baseUrl}/${id}`);
+    }
+
+    getUserByEmail(email: string): Observable<UserModel> {
+        const url = `${this.baseUrl}/email/${email}`
+        return this.http.get<UserModel>(url);
     }
 
     getUsers(pageNumber: number, pageSize: number, searchText: string): Observable<PagedUsersModel> {

@@ -2,17 +2,14 @@
   <div class="card-header d-flex align-items-center justify-content-between">
     <h5>User List</h5>
     <div>
-      <button [routerLink]="['/user']" class="btn btn-primary">+ Add a User</button>
+      <button [routerLink]="['/user']" class="btn btn-link">+ Add a User</button>
     </div>
   </div>
   <div class="card-body d-flex flex-column">
     <div class="search-filters d-flex align-items-center">
       <div class="d-flex align-items-center filter">
-        <span>Search Text</span>&nbsp;
-        <input [(ngModel)]="searchText" type="text" />
-      </div>
-      <div>
-        <button (click)="onSearch()" class="btn btn-secondary">Filter Records</button>
+        <span>Search Records:</span>&nbsp;
+        <input (ngModelChange)="onSearch()" [(ngModel)]="searchText" type="text" placeholder="Type keyword..." />
       </div>
     </div>
     <br/>

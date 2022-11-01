@@ -1,7 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
+import { EmailFormatValidator, } from 'src/app/shared/form-validators/email-format.validator';
+import { UniqueEmailValidator } from 'src/app/shared/form-validators/unique-email.validator';
 import { UserModel } from 'src/app/shared/models/user.model';
 
 @Component({
@@ -37,8 +40,9 @@ export class UserFormComponent implements OnInit {
     if (this.isEdit) this.populateForm();
   }
 
-  save(): void {
+  async save(): Promise<void> {
     const model = this.mapFormToModel();
+
     const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
     saveTask.subscribe(() => {
       alert(`User successfully saved!`);
@@ -46,13 +50,21 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  private async emailExists(email: string): Promise<boolean> {
+    const user = await firstValueFrom(this.userService.getUserByEmail(email));
+    return user != null;
+  }
+
   private initForm(): void {
     this.formGroup = this.fb.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      email: [null, [Validators.required]],
+      email: [
+        null, 
+        [Validators.required, EmailFormatValidator.validate], 
+        [UniqueEmailValidator.createValidator(this.userService, this.isEdit)]],
       gender: [this.genders[0]],
-      status: [false],
+      status: [true],
       id: [0]
     });
   }
@@ -66,6 +78,8 @@ export class UserFormComponent implements OnInit {
       status: this.userData.status,
       id: this.userData.id
     })
+
+    this.email.disable();
   }
 
   private mapFormToModel(): UserModel {

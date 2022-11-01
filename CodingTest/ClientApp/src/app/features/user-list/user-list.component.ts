@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject, debounce, debounceTime, Observable, tap } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
 import { UserModel } from 'src/app/shared/models/user.model';
 
@@ -13,16 +14,22 @@ export class UserListComponent {
   page = 1;
   totalItems = 0;
   searchText = "";
+  searchTextSubj = new BehaviorSubject('');
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
     this.getUsers(this.page);
+
+    this.searchTextSubj.pipe(
+      debounceTime(500),
+      tap(() => this.onPageChange(1))
+    ).subscribe();
   }
 
   onSearch(): void {
-    this.onPageChange(1);
+    this.searchTextSubj.next(this.searchText);
   }
 
   onPageChange(page: number): void {

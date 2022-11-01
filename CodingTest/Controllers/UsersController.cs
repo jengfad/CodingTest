@@ -6,11 +6,11 @@ namespace CodingTest.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -27,6 +27,13 @@ namespace CodingTest.Controllers
         public ActionResult<UserDto> Get(int id)
         {
             var result = _userService.GetUser(id);
+            return Ok(result);
+        }
+
+        [HttpGet("email/{email}")]
+        public ActionResult<UserDto> GetByEmail(string email)
+        {
+            var result = _userService.GetUserByEmail(email);
             return Ok(result);
         }
 

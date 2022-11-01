@@ -14,3 +14,8 @@ button {
 .form-group.gender label {
     margin-right: 15px;
 }
+
+label.required:after {
+    content:" *";
+    color: red;
+}

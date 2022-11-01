@@ -9,6 +9,8 @@
                         placeholder="Enter email address" required />
                     <div class="text-danger" *ngIf="email.touched && email.errors">
                         <label *ngIf="email.errors['required']">Required</label>
+                        <label *ngIf="email.errors.emailInvalid">{{email.errors.emailInvalid}}</label>
+                        <label *ngIf="email.errors.emailAlreadyExists">{{email.errors.emailAlreadyExists}}</label>
                     </div>
                 </div>
             </div>
@@ -46,7 +48,7 @@
             </div>
             <div class="actions d-flex">
                 <button [routerLink]="['/']" class="btn btn-link">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button [disabled]="!formGroup.valid" type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
     </div>

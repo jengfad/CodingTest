@@ -6,6 +6,7 @@ namespace CodingTest.Services
     {
         PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText);
         UserDto GetUser(int id);
+        UserDto GetUserByEmail(string email);
         void AddUser(UserDto dto);
         void UpdateUser(UserDto dto);
         void DeleteUser(int id);

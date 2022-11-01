@@ -17,6 +17,11 @@ namespace CodingTest.Repositories
             return _dataContext.Users.FirstOrDefault(u => u.Id == id);
         }
 
+        public User GetUserByEmail(string email)
+        {
+            return _dataContext.Users.FirstOrDefault(u => string.Equals(email, u.Email, StringComparison.OrdinalIgnoreCase));
+        }
+
         public IEnumerable<User> GetUsers()
         {
             return _dataContext.Users.OrderBy(u => u.Email);
