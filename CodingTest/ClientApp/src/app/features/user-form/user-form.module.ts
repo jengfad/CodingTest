@@ -5,7 +5,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CoreModule } from 'src/app/core/core.module';
 import { UserFormRoutingModule } from './user-form-routing.module';
 import { UserFormComponent } from './user-form.component';
-import { UserFormResolver } from './user-form.resolver';
 
 @NgModule({
   declarations: [
@@ -17,7 +16,7 @@ import { UserFormResolver } from './user-form.resolver';
     UserFormRoutingModule,
     NgxPaginationModule,
     FormsModule,
-	ReactiveFormsModule
+	  ReactiveFormsModule
   ]
 })
 export class UserFormModule { }

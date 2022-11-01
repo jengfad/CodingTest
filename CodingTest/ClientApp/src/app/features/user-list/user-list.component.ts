@@ -3,6 +3,7 @@ import { BehaviorSubject, debounce, debounceTime, Observable, tap } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
 import { UserModel } from 'src/app/shared/models/user.model';
 import { AppConstants } from 'src/app/shared/app-constants';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-user-list',
@@ -23,7 +24,9 @@ export class UserListComponent {
   
   private searchTextSubj = new BehaviorSubject('');
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private dialogService: DialogService) {
   }
 
   ngOnInit(): void {
@@ -64,12 +67,12 @@ export class UserListComponent {
     });
   }
 
-  deleteUser(user: UserModel) {
-    var confirm = window.confirm(`Delete ${user.email}?`);
+  async deleteUser(user: UserModel) {
+    const confirm = await this.dialogService.openSimpleDialog("Delete User", `Are you sure you want to delete ${user.email}?`, true);
     if (!confirm) return;
 
-    this.userService.deleteUser(user.id).subscribe(() => {
-      alert(`${user.email} successfully deleted!`);
+    this.userService.deleteUser(user.id).subscribe(async () => {
+      await this.dialogService.openSimpleDialog("Delete User", `${user.email} successfully deleted!`);
     });
   }
 }

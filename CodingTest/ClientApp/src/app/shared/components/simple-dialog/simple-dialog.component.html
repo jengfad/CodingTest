@@ -1,0 +1,20 @@
+<div class="modal-header">
+	<h5 class="modal-title">{{ title }}</h5>
+</div>
+<div class="modal-body dialog-body">
+	<p class="overflow-break-word" [innerHTML]="message"></p>
+</div>
+<div class="modal-footer">
+	<button *ngIf="!isConfirm; else confirm_actions" type="button" 
+		class="btn btn-light cancel-btn larger-btn" (click)="close(true)">
+		{{ closeButtonText }}
+	</button>
+	<ng-template #confirm_actions>
+		<button type="button" class="btn btn-light cancel-btn larger-btn" (click)="close(true)">
+			{{ yesButtonText }}
+		</button>
+		<button type="button" class="btn btn-light cancel-btn larger-btn" (click)="close(false)">
+			{{ noButtonText }}
+		</button>
+	</ng-template>
+</div>

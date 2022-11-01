@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, filter, firstValueFrom, tap } from 'rxjs';
+import { filter, tap } from 'rxjs';
+import { DialogService } from 'src/app/core/services/dialog.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import { EmailFormatValidator, } from 'src/app/shared/form-validators/email-format.validator';
@@ -30,6 +31,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   get id() { return this.formGroup.get('id') as UntypedFormControl; }
   
   constructor(
+		private dialogService: DialogService,
     private userService: UserService,
     private fb: UntypedFormBuilder,
     private router: Router,
@@ -51,8 +53,9 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
     const model = this.mapFormToModel();
 
     const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
-    saveTask.subscribe(() => {
-      alert(`User successfully saved!`);
+    saveTask.subscribe(async () => {
+      await this.dialogService.openSimpleDialog("Add User", "User successfully saved!");
+      this.setHasDirtyChange(false);
       this.router.navigate(['/']);
     });
   }
@@ -95,5 +98,4 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
       id: this.id.value
     } as UserModel
   }
-
 }
