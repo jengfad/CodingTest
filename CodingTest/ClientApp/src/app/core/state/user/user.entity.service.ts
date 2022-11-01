@@ -13,6 +13,7 @@ export class PagedUsersEntityService extends BaseEntityService<PagedUsersParams,
         private api: UserApiService) {
           super(stateQuery.pagedUsersQuery, store.pagedUsers);
     }
+
     protected getFromApi(params: PagedUsersParams): Observable<PagedUsersModel> {
         return this.api.getUsers(params).pipe(
             tap(result => {

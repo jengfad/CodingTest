@@ -3,6 +3,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs';
 import { DialogService, UserApiService } from 'src/app/core/services';
+import { UserService } from 'src/app/core/state/user/user.service';
 import { AppConstants } from 'src/app/shared/app-constants';
 import { BaseFormComponent } from 'src/app/shared/components';
 import { EmailFormatValidator, UniqueEmailValidator } from 'src/app/shared/form-validators';
@@ -30,8 +31,9 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   get id() { return this.formGroup.get('id') as UntypedFormControl; }
   
   constructor(
-		private dialogService: DialogService,
     private userApi: UserApiService,
+		private dialogService: DialogService,
+    private userService: UserService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute) {
@@ -51,7 +53,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   async save(): Promise<void> {
     const model = this.mapFormToModel();
 
-    const saveTask = this.isEdit ? this.userApi.updateUser(model) : this.userApi.addUser(model);
+    const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
     saveTask.subscribe(async () => {
       await this.dialogService.openSimpleDialogAsync("Add User", "User successfully saved!");
       this.setHasDirtyChange(false);

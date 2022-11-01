@@ -46,7 +46,8 @@ namespace CodingTest.Repositories
 
         private int GetNewUserId()
         {
-            return _dataContext.Users.Count + 1;
+            _dataContext.IncrementIdentity();
+            return _dataContext.GetUserIdentity();
         }
 
         public int GetTotalUserCount(string searchText)

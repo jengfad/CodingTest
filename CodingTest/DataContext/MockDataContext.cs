@@ -7,9 +7,23 @@ namespace CodingTest.DataContext
     public class MockDataContext : IDataContext
     {
         public IList<User> Users { get; set; }
+
+        private int CurrentIdentity;
+
         public MockDataContext()
         {
             SeedUserData();
+            CurrentIdentity = Users.Count;
+        }
+
+        public int GetUserIdentity()
+        {
+            return CurrentIdentity;
+        }
+
+        public void IncrementIdentity()
+        {
+            CurrentIdentity++;
         }
 
         private void SeedUserData()

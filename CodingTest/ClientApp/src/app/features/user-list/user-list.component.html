@@ -9,7 +9,7 @@
     <div class="search-filters d-flex align-items-center">
       <div class="d-flex align-items-center filter">
         <span>Search Records:</span>&nbsp;
-        <input id="inputSearch" (keyup)="onSearch()" type="text" placeholder="Type keyword..." />
+        <input id="inputSearch" (keyup)="onSearch()" type="text" [value]="(filters$ | async)?.searchText" placeholder="Type keyword..." />
       </div>
     </div>
     <br/>

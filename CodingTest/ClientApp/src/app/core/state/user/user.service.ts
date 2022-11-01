@@ -1,14 +1,16 @@
 
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
-import { PagedUsersModel } from "src/app/shared/models";
+import { PagedUsersModel, UserModel } from "src/app/shared/models";
 import { PagedUsersParams, UserQuery } from ".";
+import { UserApiService } from "../../services";
 import { PagedUsersEntityService } from "./user.entity.service";
 import { UserStore } from "./user.store";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
     constructor(
+        private api: UserApiService,
         private store: UserStore,
         private pagedUsersEntity: PagedUsersEntityService
     ) {}
@@ -27,7 +29,42 @@ export class UserService {
         this.store.update({filters: filters});
     }
 
-    resetSelections() {
-        this.store.update(this.store.resetDefaults());
+    deleteUser(userId: number): Observable<void> {
+        return this.api.deleteUser(userId).pipe(
+            tap(() => {
+                this.resetPagedUsersStore();
+                this.resetPagedUserFilters();
+            })
+        );
+    }
+
+    updateUser(user: UserModel): Observable<void> {
+        return this.api.updateUser(user).pipe(
+            tap(() => {
+                this.resetPagedUsers();
+            })
+        );
+    }
+
+    addUser(user: UserModel): Observable<void> {
+        return this.api.addUser(user).pipe(
+            tap(() => {
+                this.resetPagedUsers();
+            })
+        );
+    }
+
+    resetPagedUsers(): void {
+        this.resetPagedUsersStore();
+        this.resetPagedUserFilters();
+    }
+
+    resetPagedUserFilters(): void {
+        const initialFilters = this.store.resetDefaults().filters;
+        this.updateFilters(initialFilters);
+    }
+
+    resetPagedUsersStore() {
+        this.pagedUsersEntity.reset();
     }
 }

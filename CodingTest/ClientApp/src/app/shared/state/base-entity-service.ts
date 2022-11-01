@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { BaseQuery } from './BaseQuery';
+import { BaseQuery } from './base-query';
 import { EntityStore, EntityState } from '@datorama/akita';
 import { tap, delay } from 'rxjs/operators';
 
@@ -18,6 +18,10 @@ export abstract class BaseEntityService<TParams, TView, TResult> {
       return this.query.selectData(params).pipe(
         delay(1), // if removed, ui will not update with current data
       );
+    }
+
+    reset(): void {
+      this.entityStore.remove();
     }
 
     get(params: TParams): Observable<TResult> {
