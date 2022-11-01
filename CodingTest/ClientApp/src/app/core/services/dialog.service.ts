@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { firstValueFrom, from, map, Observable } from "rxjs";
-import { SimpleDialogComponent } from "src/app/shared/components/simple-dialog/simple-dialog.component";
+import { ServiceErrorDialogComponent, SimpleDialogComponent } from "../components";
 
 @Injectable({
     providedIn: 'root'
@@ -9,6 +9,19 @@ import { SimpleDialogComponent } from "src/app/shared/components/simple-dialog/s
 export class DialogService {
     constructor(private modalService: NgbModal) {
     }
+
+	public async openServiceErrorDialogAsync(message: string): Promise<boolean> {
+		return await firstValueFrom(this.openServiceErrorDialog(message));
+	}
+
+	public openServiceErrorDialog(message: string): Observable<boolean> {
+		const modalRef = this.modalService.open(ServiceErrorDialogComponent, {
+			backdrop: 'static',
+			keyboard: false
+		});
+		modalRef.componentInstance.message = message;
+		return from(modalRef.result).pipe(map( (value: boolean) => value));
+	}
 
 	public async openSimpleDialogAsync(title: string, message: string, isConfirm: boolean = false): Promise<boolean> {
 		return await firstValueFrom(this.openSimpleDialog(title, message, isConfirm));
