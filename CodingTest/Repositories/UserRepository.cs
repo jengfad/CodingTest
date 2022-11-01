@@ -34,10 +34,11 @@ namespace CodingTest.Repositories
                 .Take(filter.PageSize);
         }
 
-        public void AddUser(User user)
+        public int AddUser(User user)
         {
             user.Id = GetNewUserId();
             _dataContext.Users.Add(user);
+            return user.Id;
         }
 
         private int GetNewUserId()

@@ -41,14 +41,16 @@ namespace CodingTest.Services
             return new PagedUsersDto { Users = usersDto, TotalItems = count };
         }
 
-        public void AddUser(UserDto dto)
+        public int AddUser(UserDto dto)
         {
+            CheckRequiredFields(dto);
             var userToAdd = _mapper.Map<UserDto, User>(dto);
-            _userRepository.AddUser(userToAdd);
+            return _userRepository.AddUser(userToAdd);
         }
 
         public void UpdateUser(UserDto dto)
         {
+            CheckRequiredFields(dto);
             var oldUser = _userRepository.GetUser(dto.Id);
 
             if (oldUser == null)
@@ -66,6 +68,23 @@ namespace CodingTest.Services
                 throw new RecordNotFoundException(id);
 
             _userRepository.DeleteUser(userToDelete);
+        }
+        private void CheckRequiredFields(UserDto user)
+        {
+            var missingProps = new List<string>();
+            if (string.IsNullOrWhiteSpace(user.Email))
+                missingProps.Add("Email");
+            if (string.IsNullOrWhiteSpace(user.FirstName))
+                missingProps.Add("FirstName");
+            if (string.IsNullOrWhiteSpace(user.LastName))
+                missingProps.Add("LastName");
+            if (string.IsNullOrWhiteSpace(user.Gender))
+                missingProps.Add("Gender");
+
+            if (missingProps.Any())
+            {
+                throw new InvalidRecordException<UserDto>(string.Join(",", missingProps), user);
+            }
         }
     }
 }

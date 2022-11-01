@@ -8,7 +8,7 @@ namespace CodingTest.Services
         PagedUsersDto GetPagedUsers(UserFilter filter);
         UserDto GetUser(int id);
         UserDto GetUserByEmail(string email);
-        void AddUser(UserDto dto);
+        int AddUser(UserDto dto);
         void UpdateUser(UserDto dto);
         void DeleteUser(int id);
     }
