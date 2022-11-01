@@ -26,16 +26,8 @@ namespace CodingTest.ExceptionFilters
                 StatusCode = GetStatusCode(exceptionType)
             };
 
-            LogError(context, exceptionType);
+            _logger.LogError($"{context.Exception}");
             context.Result = result;
-        }
-
-        private void LogError(ExceptionContext context, Type exceptionType)
-        {
-            if (exceptionType == typeof(RecordNotFoundException))
-                _logger.LogError(context.Exception.Message, context.Exception.Source);
-            else
-                _logger.LogError("Unhandled exception occurred while executing request: {ex}", context.Exception);
         }
 
         private static int GetStatusCode(Type exceptionType)
