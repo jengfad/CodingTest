@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CodingTest.Exceptions;
 using CodingTest.Models.Data;
 using CodingTest.Models.Dto;
 using CodingTest.Repositories;
@@ -25,6 +26,10 @@ namespace CodingTest.Services
         public UserDto GetUser(int id)
         {
             var user = _userRepository.GetUser(id);
+            
+            if (user == null)
+                throw new RecordNotFoundException(id);
+
             return _mapper.Map<User, UserDto>(user);
         }
 
@@ -44,13 +49,23 @@ namespace CodingTest.Services
 
         public void UpdateUser(UserDto dto)
         {
-            var userToUpdate = _mapper.Map<UserDto, User>(dto);
-            _userRepository.UpdateUser(userToUpdate);
+            var oldUser = _userRepository.GetUser(dto.Id);
+
+            if (oldUser == null)
+                throw new RecordNotFoundException(dto.Email);
+
+            var updatedUser = _mapper.Map<UserDto, User>(dto);
+            _userRepository.UpdateUser(oldUser, updatedUser);
         }
 
         public void DeleteUser(int id)
         {
-            _userRepository.DeleteUser(id);
+            var userToDelete = _userRepository.GetUser(id);
+
+            if (userToDelete == null)
+                throw new RecordNotFoundException(id);
+
+            _userRepository.DeleteUser(userToDelete);
         }
     }
 }

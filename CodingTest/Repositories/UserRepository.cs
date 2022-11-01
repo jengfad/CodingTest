@@ -16,25 +16,12 @@ namespace CodingTest.Repositories
 
         public User GetUser(int id)
         {
-            var user = _dataContext.Users.FirstOrDefault(u => u.Id == id);
-            if (user == null)
-                throw new RecordNotFoundException(id);
-
-            return user;
+            return _dataContext.Users.FirstOrDefault(u => u.Id == id);
         }
 
         public User GetUserByEmail(string email)
         {
-            var user = _dataContext.Users.FirstOrDefault(u => string.Equals(email, u.Email, StringComparison.OrdinalIgnoreCase));
-            if (user == null)
-                throw new RecordNotFoundException(email);
-
-            return user;
-        }
-
-        public IEnumerable<User> GetUsers()
-        {
-            return _dataContext.Users.OrderBy(u => u.Email);
+            return _dataContext.Users.FirstOrDefault(u => string.Equals(email, u.Email, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerable<User> GetUsers(UserFilter filter)
@@ -64,27 +51,17 @@ namespace CodingTest.Repositories
             return _dataContext.Users.Where(user => user.IsUserMatch(searchText)).Count();
         }
 
-        public void UpdateUser(User user)
+        public void UpdateUser(User oldUser, User updatedUser)
         {
-            var toUpdate = _dataContext.Users.FirstOrDefault(u => u.Id == user.Id);
-
-            if (user == null) 
-                throw new RecordNotFoundException(user.Email);
-
-            toUpdate.Email = user.Email;
-            toUpdate.FirstName = user.FirstName;
-            toUpdate.LastName = user.LastName;
-            toUpdate.Gender = user.Gender;
-            toUpdate.Status = user.Status;
+            oldUser.Email = updatedUser.Email;
+            oldUser.FirstName = updatedUser.FirstName;
+            oldUser.LastName = updatedUser.LastName;
+            oldUser.Gender = updatedUser.Gender;
+            oldUser.Status = updatedUser.Status;
         }
 
-        public void DeleteUser(int id)
+        public void DeleteUser(User user)
         {
-            var user = _dataContext.Users.FirstOrDefault(u => u.Id == id);
-
-            if (user == null)
-                throw new RecordNotFoundException(id);
-
             _dataContext.Users.Remove(user);
         }
     }
