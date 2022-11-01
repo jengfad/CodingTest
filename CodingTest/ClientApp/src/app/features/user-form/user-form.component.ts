@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, tap } from 'rxjs';
+import { filter, takeUntil, tap } from 'rxjs';
 import { DialogService, UserApiService } from 'src/app/core/services';
 import { UserService } from 'src/app/core/state/user/user.service';
 import { AppConstants } from 'src/app/shared/app-constants';
@@ -45,6 +45,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
     if (this.isEdit) this.populateForm();
 
     this.formGroup.valueChanges.pipe(
+      takeUntil(this.ngUnsubscribe$),
       filter(() => !this.hasDirtyChange()),
       tap(() => this.setHasDirtyChange(true))
     ).subscribe()
@@ -52,7 +53,6 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
 
   async save(): Promise<void> {
     const model = this.mapFormToModel();
-
     const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
     saveTask.subscribe(async () => {
       await this.dialogService.openSimpleDialogAsync(this.title, "User successfully saved!");
@@ -97,6 +97,6 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
       gender: this.gender.value,
       status: this.status.value,
       id: this.id.value
-    } as UserModel
+    } as UserModel;
   }
 }

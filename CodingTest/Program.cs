@@ -1,4 +1,5 @@
 using CodingTest.DataContext;
+using CodingTest.ExceptionFilters;
 using CodingTest.Mapping;
 using CodingTest.Repositories;
 using CodingTest.Services;
@@ -8,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<CustomExceptionFilter>();
+});
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
