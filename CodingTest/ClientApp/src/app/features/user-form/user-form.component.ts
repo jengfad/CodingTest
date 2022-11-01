@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, firstValueFrom } from 'rxjs';
+import { combineLatest, filter, firstValueFrom, tap } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import { EmailFormatValidator, } from 'src/app/shared/form-validators/email-format.validator';
@@ -41,9 +41,10 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
     this.initForm();
     if (this.isEdit) this.populateForm();
 
-    this.formGroup.valueChanges.subscribe(() => {
-      this.setHasDirtyChange(true);
-    })
+    this.formGroup.valueChanges.pipe(
+      filter(() => !this.hasDirtyChange()),
+      tap(() => this.setHasDirtyChange(true))
+    ).subscribe()
   }
 
   async save(): Promise<void> {
@@ -57,13 +58,14 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   }
 
   private initForm(): void {
+    const emailValidators = !this.isEdit ? [
+      [Validators.required, EmailFormatValidator.validate], 
+      [UniqueEmailValidator.createValidator(this.userService, this.isEdit)]
+    ] : [];
     this.formGroup = this.fb.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      email: [
-        null, 
-        [Validators.required, EmailFormatValidator.validate], 
-        [UniqueEmailValidator.createValidator(this.userService, this.isEdit)]],
+      email: [null, ...emailValidators],
       gender: [this.genders[0]],
       status: [true],
       id: [0]
@@ -78,7 +80,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
       gender: this.userData.gender,
       status: this.userData.status,
       id: this.userData.id
-    })
+    });
 
     this.email.disable();
   }

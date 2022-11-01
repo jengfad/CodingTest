@@ -47,7 +47,7 @@
                 <input id="status" type="checkbox" formControlName="status" class="form-check-input"/>    
             </div>
             <div class="actions d-flex">
-                <button [routerLink]="['/']" class="btn btn-link">Cancel</button>
+                <button type="button" [routerLink]="['/']" class="btn btn-link">Cancel</button>
                 <button [disabled]="!formGroup.valid" type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
