@@ -48,7 +48,7 @@
             </div>
             <div class="actions d-flex">
                 <button type="button" [routerLink]="['/']" class="btn btn-link">Cancel</button>
-                <button [disabled]="!formGroup.valid" type="submit" class="btn btn-primary">Submit</button>
+                <button [disabled]="!formGroup.valid || !formGroup.dirty" type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
     </div>
