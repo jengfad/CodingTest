@@ -17,7 +17,6 @@ export class UserListComponent extends BaseComponent {
   readonly SORT_BY_TYPES = AppConstants.SORT_BY_TYPES;
   readonly SORT_DIRECTION = AppConstants.SORT_DIRECTION;
 
-  searchText = this.userQuery.filters.searchText;
   pagedUsers$ = this.userQuery.pagedUsers$;
   filters$ = this.userQuery.filters$;
   page: number;
@@ -36,6 +35,7 @@ export class UserListComponent extends BaseComponent {
   listenForPagedUserEvents(): void {
     this.userQuery.filters$.pipe(
       takeUntil(this.ngUnsubscribe$),
+      debounceTime(300),
       switchMap(filters => {
         return this.userService.getPagedUsers(filters);
       })
@@ -58,11 +58,12 @@ export class UserListComponent extends BaseComponent {
   }
 
   onSearch(): void {
+    const searchText = document.querySelector("#inputSearch")['value'];
     const currentFilters = this.userQuery.filters;
     this.userService.updateFilters(
       {...currentFilters, 
         pageNumber: 1, 
-        searchText: this.searchText
+        searchText: searchText
       } as PagedUsersParams);
   }
 
