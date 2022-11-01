@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { combineLatest, firstValueFrom } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
+import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import { EmailFormatValidator, } from 'src/app/shared/form-validators/email-format.validator';
 import { UniqueEmailValidator } from 'src/app/shared/form-validators/unique-email.validator';
 import { UserModel } from 'src/app/shared/models/user.model';
@@ -12,7 +13,7 @@ import { UserModel } from 'src/app/shared/models/user.model';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css']
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent extends BaseFormComponent implements OnInit {
 
   userData = this.route.snapshot.data['user'];
   formGroup: FormGroup;
@@ -33,11 +34,16 @@ export class UserFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute) {
+      super();
   }
 
   ngOnInit(): void {
     this.initForm();
     if (this.isEdit) this.populateForm();
+
+    this.formGroup.valueChanges.subscribe(() => {
+      this.setHasDirtyChange(true);
+    })
   }
 
   async save(): Promise<void> {
@@ -48,11 +54,6 @@ export class UserFormComponent implements OnInit {
       alert(`User successfully saved!`);
       this.router.navigate(['/']);
     });
-  }
-
-  private async emailExists(email: string): Promise<boolean> {
-    const user = await firstValueFrom(this.userService.getUserByEmail(email));
-    return user != null;
   }
 
   private initForm(): void {
