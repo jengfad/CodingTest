@@ -13,7 +13,8 @@ const routes: Routes = [
     {
 		path: ':userId',
 		component: UserFormComponent,
-        resolve: { user: UserFormResolver }
+        resolve: { user: UserFormResolver },
+		canDeactivate: [PendingChangesGuard]
 	}
 ]
 

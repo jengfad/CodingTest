@@ -76,11 +76,11 @@ export class UserListComponent extends BaseComponent {
   }
 
   async deleteUser(user: UserModel) {
-    const confirm = await this.dialogService.openSimpleDialog("Delete User", `Are you sure you want to delete ${user.email}?`, true);
+    const confirm = await this.dialogService.openSimpleDialogAsync("Delete User", `Are you sure you want to delete ${user.email}?`, true);
     if (!confirm) return;
 
     this.userService.deleteUser(user.id).subscribe(async () => {
-      await this.dialogService.openSimpleDialog("Delete User", `${user.email} successfully deleted!`);
+      await this.dialogService.openSimpleDialogAsync("Delete User", `${user.email} successfully deleted!`);
     });
   }
 }

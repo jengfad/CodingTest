@@ -53,7 +53,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
 
     const saveTask = this.isEdit ? this.userService.updateUser(model) : this.userService.addUser(model);
     saveTask.subscribe(async () => {
-      await this.dialogService.openSimpleDialog("Add User", "User successfully saved!");
+      await this.dialogService.openSimpleDialogAsync("Add User", "User successfully saved!");
       this.setHasDirtyChange(false);
       this.router.navigate(['/']);
     });
