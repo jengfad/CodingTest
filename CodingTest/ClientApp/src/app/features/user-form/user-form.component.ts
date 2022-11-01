@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, filter, firstValueFrom, tap } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
@@ -16,22 +16,22 @@ import { UserModel } from 'src/app/shared/models/user.model';
 export class UserFormComponent extends BaseFormComponent implements OnInit {
 
   userData = this.route.snapshot.data['user'];
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   isEdit = this.userData;
   title = this.isEdit ? 'Edit User' : 'Add User';
 
   genders = ['Male', 'Female'];
 
-  get firstName() { return this.formGroup.get('firstName') as FormControl; }
-  get lastName() { return this.formGroup.get('lastName') as FormControl; }
-  get email() { return this.formGroup.get('email') as FormControl; }
-  get gender() { return this.formGroup.get('gender') as FormControl; }
-  get status() { return this.formGroup.get('status') as FormControl; }
-  get id() { return this.formGroup.get('id') as FormControl; }
+  get firstName() { return this.formGroup.get('firstName') as UntypedFormControl; }
+  get lastName() { return this.formGroup.get('lastName') as UntypedFormControl; }
+  get email() { return this.formGroup.get('email') as UntypedFormControl; }
+  get gender() { return this.formGroup.get('gender') as UntypedFormControl; }
+  get status() { return this.formGroup.get('status') as UntypedFormControl; }
+  get id() { return this.formGroup.get('id') as UntypedFormControl; }
   
   constructor(
     private userService: UserService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute) {
       super();
