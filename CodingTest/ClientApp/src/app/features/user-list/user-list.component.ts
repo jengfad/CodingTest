@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, debounceTime, tap } from 'rxjs';
-import { UserService } from 'src/app/core/services/user.service';
-import { UserModel } from 'src/app/shared/models/user.model';
+import { BehaviorSubject, debounceTime, takeUntil, tap } from 'rxjs';
+import { DialogService, UserService } from 'src/app/core/services';
 import { AppConstants } from 'src/app/shared/app-constants';
-import { DialogService } from 'src/app/core/services/dialog.service';
+import { BaseComponent } from 'src/app/shared/components';
+import { UserModel, UserSearchModel } from 'src/app/shared/models';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent {
+export class UserListComponent extends BaseComponent {
   readonly ORDER_BY_TYPES = AppConstants.ORDER_BY_TYPES;
   readonly SORT_DIRECTION = AppConstants.SORT_DIRECTION;
 
@@ -27,12 +27,14 @@ export class UserListComponent {
   constructor(
     private userService: UserService,
     private dialogService: DialogService) {
+      super();
   }
 
   ngOnInit(): void {
     this.getUsers(this.page);
 
     this.searchTextSubj.pipe(
+      takeUntil(this.ngUnsubscribe$),
       debounceTime(500),
       tap(() => this.onPageChange(1))
     ).subscribe();
@@ -61,7 +63,13 @@ export class UserListComponent {
   }
 
   getUsers(page: number): void {
-    this.userService.getUsers(page, this.itemsPerPage, this.searchText, this.orderBy, this.sortDirection).subscribe(result => {
+    const params = { 
+      pageNumber: page, 
+      pageSize: this.itemsPerPage, 
+      searchText: this.searchText, 
+      sortDirection: this.sortDirection,
+      orderBy: this.orderBy } as UserSearchModel;
+    this.userService.getUsers(params).subscribe(result => {
       this.users = result.users;
       this.totalItems = result.totalItems;
     });

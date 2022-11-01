@@ -1,5 +1,4 @@
-﻿using CodingTest.Enums;
-
+﻿
 namespace CodingTest.Models.Dto
 {
     public class UserDto

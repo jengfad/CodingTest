@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs';
-import { DialogService } from 'src/app/core/services/dialog.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { DialogService, UserService } from 'src/app/core/services';
 import { AppConstants } from 'src/app/shared/app-constants';
-import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
-import { EmailFormatValidator, } from 'src/app/shared/form-validators/email-format.validator';
-import { UniqueEmailValidator } from 'src/app/shared/form-validators/unique-email.validator';
-import { UserModel } from 'src/app/shared/models/user.model';
+import { BaseFormComponent } from 'src/app/shared/components';
+import { EmailFormatValidator, UniqueEmailValidator } from 'src/app/shared/form-validators';
+import { UserModel } from 'src/app/shared/models';
 
 @Component({
   selector: 'app-user-form',

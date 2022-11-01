@@ -13,8 +13,7 @@
       </div>
     </div>
     <br/>
-    <div *ngIf="users.length === 0">No records found</div>
-    <div *ngIf="users.length > 0" class="w-100 d-flex flex-column align-items-center">
+    <div *ngIf="users.length > 0; else no_records" class="w-100 d-flex flex-column align-items-center">
       <table class="table table-bordered w-100">
         <thead class="thead-secondary">
           <tr>
@@ -44,5 +43,8 @@
         <pagination-controls (pageChange)="onPageChange((page = $event))"></pagination-controls>
       </div>
     </div>
+    <ng-template #no_records>
+      <h6>No records found</h6>
+    </ng-template>
   </div>
 </div>

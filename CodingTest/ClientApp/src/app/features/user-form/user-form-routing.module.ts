@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PendingChangesGuard } from 'src/app/core/guards/pending-changes.guard';
+import { PendingChangesGuard } from 'src/app/core/guards';
 import { UserFormComponent } from './user-form.component';
 import { UserFormResolver } from './user-form.resolver';
 
