@@ -28,11 +28,11 @@ namespace CodingTest.Services
             return _mapper.Map<User, UserDto>(user);
         }
 
-        public PagedUsersDto GetPagedUsers(int pageNumber, int pageSize, string searchText, string orderBy, string sortDirection)
+        public PagedUsersDto GetPagedUsers(UserFilter filter)
         {
-            var users = _userRepository.GetUsers(pageNumber, pageSize, searchText, orderBy, sortDirection);
+            var users = _userRepository.GetUsers(filter);
             var usersDto = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
-            var count = _userRepository.GetTotalUserCount(searchText);
+            var count = _userRepository.GetTotalUserCount(filter.SearchText);
             return new PagedUsersDto { Users = usersDto, TotalItems = count };
         }
 

@@ -28,14 +28,14 @@ namespace CodingTest.Repositories
             return _dataContext.Users.OrderBy(u => u.Email);
         }
 
-        public IEnumerable<User> GetUsers(int pageNumber, int pageSize, string searchText, string orderBy, string sortDirection)
+        public IEnumerable<User> GetUsers(UserFilter filter)
         {
-            var skipRecords = (pageNumber - 1) * pageSize;
+            var skipRecords = (filter.PageNumber - 1) * filter.PageSize;
             return _dataContext.Users
-                .Where(user => user.IsUserMatch(searchText))
-                .OrderByCustomParams(orderBy, sortDirection)
+                .Where(user => user.IsUserMatch(filter.SearchText))
+                .OrderByCustomParams(filter.SortBy, filter.SortDirection)
                 .Skip(skipRecords)
-                .Take(pageSize);
+                .Take(filter.PageSize);
         }
 
         public void AddUser(User user)

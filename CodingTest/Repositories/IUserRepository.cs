@@ -5,7 +5,7 @@ namespace CodingTest.Repositories
     public interface IUserRepository
     {
         IEnumerable<User> GetUsers();
-        IEnumerable<User> GetUsers(int pageNumber, int pageSize, string searchText, string orderBy, string sortDirection);
+        IEnumerable<User> GetUsers(UserFilter filter);
         User GetUser(int id);
         User GetUserByEmail(string email);
         void AddUser(User user);

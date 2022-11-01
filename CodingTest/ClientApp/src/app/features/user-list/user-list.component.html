@@ -17,11 +17,11 @@
       <table class="table table-bordered w-100">
         <thead class="thead-secondary">
           <tr>
-            <th (click)="sortBy(ORDER_BY_TYPES.FIRST_NAME)" class="sort-by" title="Sort by first name">First Name</th>
-            <th (click)="sortBy(ORDER_BY_TYPES.LAST_NAME)" class="sort-by" title="Sort by last name">Last Name</th>
-            <th (click)="sortBy(ORDER_BY_TYPES.EMAIL)" class="sort-by" title="Sort by email">Email</th>
-            <th (click)="sortBy(ORDER_BY_TYPES.GENDER)" class="sort-by text-center" title="Sort by gender">Gender</th>
-            <th (click)="sortBy(ORDER_BY_TYPES.STATUS)" class="sort-by text-center" title="Sort by status">Status</th>
+            <th (click)="onSort(SORT_BY_TYPES.FIRST_NAME)" class="sort-by">First Name</th>
+            <th (click)="onSort(SORT_BY_TYPES.LAST_NAME)" class="sort-by">Last Name</th>
+            <th (click)="onSort(SORT_BY_TYPES.EMAIL)" class="sort-by">Email</th>
+            <th (click)="onSort(SORT_BY_TYPES.GENDER)" class="sort-by text-center">Gender</th>
+            <th (click)="onSort(SORT_BY_TYPES.STATUS)" class="sort-by text-center">Status</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>

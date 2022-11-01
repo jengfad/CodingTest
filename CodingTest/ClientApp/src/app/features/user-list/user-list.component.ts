@@ -11,7 +11,7 @@ import { UserModel, UserSearchModel } from 'src/app/shared/models';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent extends BaseComponent {
-  readonly ORDER_BY_TYPES = AppConstants.ORDER_BY_TYPES;
+  readonly SORT_BY_TYPES = AppConstants.SORT_BY_TYPES;
   readonly SORT_DIRECTION = AppConstants.SORT_DIRECTION;
 
   users: UserModel[] = [];
@@ -19,7 +19,7 @@ export class UserListComponent extends BaseComponent {
   page = 1;
   totalItems = 0;
   searchText = "";
-  orderBy = this.ORDER_BY_TYPES.EMAIL;
+  sortBy = this.SORT_BY_TYPES.EMAIL;
   sortDirection = this.SORT_DIRECTION.ASC;
   
   private searchTextSubj = new BehaviorSubject('');
@@ -44,11 +44,11 @@ export class UserListComponent extends BaseComponent {
     this.sortDirection = this.sortDirection === this.SORT_DIRECTION.ASC ? this.SORT_DIRECTION.DESC : this.SORT_DIRECTION.ASC;
   }
 
-  sortBy(type: string): void {
-    if (this.orderBy === type) {
+  onSort(type: string): void {
+    if (this.sortBy === type) {
       this.toggleSortDirection();
     } else {
-      this.orderBy = type;
+      this.sortBy = type;
     }
     this.onPageChange(1);
   }
@@ -66,9 +66,9 @@ export class UserListComponent extends BaseComponent {
     const params = { 
       pageNumber: page, 
       pageSize: this.itemsPerPage, 
-      searchText: this.searchText, 
-      sortDirection: this.sortDirection,
-      orderBy: this.orderBy } as UserSearchModel;
+      searchText: this.searchText,
+      sortBy: this.sortBy,
+      sortDirection: this.sortDirection } as UserSearchModel;
     this.userService.getUsers(params).subscribe(result => {
       this.users = result.users;
       this.totalItems = result.totalItems;
@@ -80,6 +80,7 @@ export class UserListComponent extends BaseComponent {
     if (!confirm) return;
 
     this.userService.deleteUser(user.id).subscribe(async () => {
+      this.onPageChange(1);
       await this.dialogService.openSimpleDialogAsync("Delete User", `${user.email} successfully deleted!`);
     });
   }

@@ -1,5 +1,5 @@
 export const AppConstants = {
-    ORDER_BY_TYPES: {
+    SORT_BY_TYPES: {
         EMAIL: 'Email',
         FIRST_NAME: 'FirstName',
         LAST_NAME: 'LastName',

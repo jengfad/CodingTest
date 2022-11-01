@@ -1,4 +1,5 @@
-﻿using CodingTest.Models.Dto;
+﻿using CodingTest.Models.Data;
+using CodingTest.Models.Dto;
 using CodingTest.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,18 @@ namespace CodingTest.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PagedUsersDto>> Get(
             [FromQuery]int pageNumber, [FromQuery] int pageSize, 
-            [FromQuery] string? searchText = null, [FromQuery] string? orderBy = null, [FromQuery] string? sortDirection = null)
+            [FromQuery] string? searchText = null, [FromQuery] string? sortBy = null, 
+            [FromQuery] string? sortDirection = null)
         {
-            var result = _userService.GetPagedUsers(pageNumber, pageSize, searchText, orderBy, sortDirection);
+            var filter = new UserFilter
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                SearchText = searchText,
+                SortBy = sortBy,
+                SortDirection = sortDirection
+            };
+            var result = _userService.GetPagedUsers(filter);
             return Ok(result);
         }
 

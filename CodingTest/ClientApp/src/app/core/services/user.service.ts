@@ -30,16 +30,16 @@ export class UserService {
         const { pageNumber: pageNumber, 
             pageSize: pageSize, 
             searchText: searchText, 
-            sortDirection: sortDirection,
-            orderBy: orderBy } = params;
+            sortBy: sortBy,
+            sortDirection: sortDirection } = params;
 
         let args = { pageNumber: pageNumber, pageSize: pageSize };
         if (searchText) {
            args['searchText'] = searchText;
         }
 
-        if (orderBy) {
-            args['orderBy'] = orderBy;
+        if (sortBy) {
+            args['sortBy'] = sortBy;
         }
 
         if (sortDirection) {
