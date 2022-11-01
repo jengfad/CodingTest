@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../core/services/user.service';
-import { UserModel } from '../models/user.model';
+import { UserService } from 'src/app/core/services/user.service';
+import { UserModel } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-user-form',
