@@ -7,7 +7,7 @@
   </div>
   <div class="card-body d-flex flex-column">
     <div class="search-filters d-flex align-items-center">
-      <div class="d-flex align-items-center filter">
+      <div class="d-flex align-items-center filter flex-column flex-lg-row w-100">
         <span>Search Records:</span>&nbsp;
         <input id="inputSearch" (keyup)="onSearch()" type="text" [value]="(filters$ | async)?.searchText" placeholder="Type keyword..." />
       </div>
@@ -15,7 +15,7 @@
     <br/>
     <div *ngIf="(pagedUsers$ | async)?.users.length > 0; else no_records" class="w-100 d-flex flex-column align-items-center">
       <table class="table table-bordered w-100">
-        <thead class="thead-secondary">
+        <thead class="thead-secondary mobile-hide">
           <tr>
             <th (click)="onSort(SORT_BY_TYPES.FIRST_NAME)" class="sort-by">First Name</th>
             <th (click)="onSort(SORT_BY_TYPES.LAST_NAME)" class="sort-by">Last Name</th>
@@ -25,7 +25,7 @@
             <th class="text-center">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="mobile-hide">
           <tr *ngFor="let user of (pagedUsers$ | async)?.users | paginate : 
               { itemsPerPage: ( filters$ | async )?.pageSize, 
                 currentPage: ( filters$ | async )?.pageNumber, 
@@ -34,10 +34,35 @@
             <td>{{user.lastName}}</td>
             <td>{{user.email}}</td>
             <td class="text-center">{{user.gender}}</td>
-            <td class="text-center" [ngClass]="user.status ? 'text-success' : 'text-danger'">{{user.status ? 'Active' : 'Inactive'}}</td>
+            <td>
+              <ng-container 
+                    [ngTemplateOutlet]="statusWrapper" 
+                    [ngTemplateOutletContext]="{user:user}">
+              </ng-container>
+            </td>
             <td class="text-center">
-              <button [routerLink]="['/user', user.id]" class="btn btn-success">Edit</button>
-              <button (click)="deleteUser(user)" class="btn btn-danger">Delete</button>
+              <ng-container 
+                    [ngTemplateOutlet]="actionButtonsWrapper" 
+                    [ngTemplateOutletContext]="{user:user}">
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="desktop-hide">
+          <tr *ngFor="let user of (pagedUsers$ | async)?.users | paginate : 
+              { itemsPerPage: ( filters$ | async )?.pageSize, 
+                currentPage: ( filters$ | async )?.pageNumber, 
+                totalItems: (pagedUsers$ | async)?.totalItems }">
+            <td class="d-flex flex-column align-items-center">
+              <div>{{user.firstName}} {{user.lastName}}</div>
+              <ng-container 
+                    [ngTemplateOutlet]="statusWrapper" 
+                    [ngTemplateOutletContext]="{user:user}">
+              </ng-container>
+              <ng-container 
+                    [ngTemplateOutlet]="actionButtonsWrapper" 
+                    [ngTemplateOutletContext]="{user:user}">
+              </ng-container>
             </td>
           </tr>
         </tbody>
@@ -51,3 +76,14 @@
     </ng-template>
   </div>
 </div>
+
+<ng-template #statusWrapper let-user='user'>
+  <div class="text-center" [ngClass]="user.status ? 'text-success' : 'text-danger'">{{user.status ? 'Active' : 'Inactive'}}</div>
+</ng-template>
+
+<ng-template #actionButtonsWrapper let-user='user'>
+  <div class="text-center">
+    <button [routerLink]="['/user', user.id]" class="btn btn-success">Edit</button>
+    <button (click)="deleteUser(user)" class="btn btn-danger">Delete</button>
+  </div>
+</ng-template>
