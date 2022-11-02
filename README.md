@@ -1,2 +1,2 @@
-- This is built on .NET 6.0
+- This is built on .NET 6.0 and Angular 14
 - First solution build will take some time because of npm packages instalation
