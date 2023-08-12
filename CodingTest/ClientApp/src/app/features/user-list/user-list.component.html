@@ -6,7 +6,7 @@
     </div>
   </div>
   <div class="card-body d-flex flex-column">
-    <div class="search-filters d-flex align-items-center">
+    <div class="search-filters d-flex align-items-center mb-3">
       <div class="d-flex align-items-center filter flex-column flex-lg-row w-100">
         <span>Search Records:</span>&nbsp;
         <input id="inputSearch" (keyup)="onSearch()" type="text" [value]="(filters$ | async)?.searchText" placeholder="Type keyword..." />

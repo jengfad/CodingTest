@@ -4,12 +4,14 @@ import { PagedUsersModel } from "src/app/shared/models/paged-users.model";
 import { UserModel } from "src/app/shared/models/user.model";
 import { PagedUsersParams } from "../state/user";
 import * as jsonData from './MOCK_DATA.json';
+import { AppConstants } from "src/app/shared/app-constants";
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserApiMockService {
     allUsers: UserModel[] = [];
+    readonly SORT_DIRECTION = AppConstants.SORT_DIRECTION;
 
 	constructor() {
         this.seedUserData();
@@ -30,14 +32,8 @@ export class UserApiMockService {
     }
 
     updateUser(user: UserModel): Observable<void> {
-        let existingUser = this.allUsers.find(u => u.id === user.id);
-        existingUser = {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            status: user.status,
-            gender: user.gender
-        } as UserModel;
+        this.allUsers = this.allUsers.filter(u => u.id !== user.id);
+        this.allUsers.push(user);
         return of(null)
     }
 
@@ -71,9 +67,49 @@ export class UserApiMockService {
             args['sortDirection'] = sortDirection;
         }
 
+        const sortField = this.getSortField(params.sortBy);
+        const clonedUsers = JSON.parse(JSON.stringify(this.allUsers));
+        let sortedUsers = clonedUsers.sort((a, b) => this.customSort(a[sortField], b[sortField], sortDirection)).filter(user => this.customFilter(user, params.searchText));
+
         return of({
-            users: this.allUsers,
-            totalItems: this.allUsers.length
+            users: sortedUsers,
+            totalItems: sortedUsers.length
         } as PagedUsersModel)
+    }
+
+    private customFilter(user: UserModel, searchText: string): boolean {
+        if (!searchText) return true
+        return user.email.toLocaleLowerCase().includes(searchText) 
+            || user.firstName.toLocaleLowerCase().includes(searchText)
+            || user.lastName.toLocaleLowerCase().includes(searchText)
+            || user.gender.toLocaleLowerCase().includes(searchText)
+    }
+
+    private getSortField(sortBy: string): string {
+        if (sortBy.toLowerCase() === 'firstname') {
+            return 'firstName';
+        } else if (sortBy.toLowerCase() === 'lastname') {
+            return 'lastName';
+        }
+
+        return sortBy.toLowerCase();
+    }
+
+    private customSort(x: string, y: string, sortDirection: string): number {
+        if (!x || !y) return 1;
+
+        const a = x.toLowerCase();
+        const b = y.toLowerCase();
+        try {
+            if (sortDirection === this.SORT_DIRECTION.ASC) {
+                return a < b ? -1 : 1
+            } else {
+                return a > b ? -1 : 1
+            }
+        } catch(error) {
+            console.log(error)
+        }
+
+        return -1;
     }
 }
