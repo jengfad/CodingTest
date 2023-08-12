@@ -69,13 +69,23 @@ export class UserApiMockService {
 
         const sortField = this.getSortField(params.sortBy);
         const clonedUsers = JSON.parse(JSON.stringify(this.allUsers));
-        let sortedUsers = clonedUsers.sort((a, b) => this.customSort(a[sortField], b[sortField], sortDirection)).filter(user => this.customFilter(user, params.searchText));
+        let filteredUsers = clonedUsers
+            .filter(user => this.customFilter(user, params.searchText))
+            .sort((a, b) => this.customSort(a[sortField], b[sortField], sortDirection));
+
+        let pagedUsers = this.paginate(filteredUsers, params);
 
         return of({
-            users: sortedUsers,
-            totalItems: sortedUsers.length
+            users: pagedUsers,
+            totalItems: filteredUsers.length
         } as PagedUsersModel)
     }
+
+    private paginate(users: UserModel[], params: PagedUsersParams): UserModel[] {
+        const start = ((params.pageNumber - 1) * params.pageSize);
+        const end = start + params.pageSize;
+        return users.slice(start, end);
+    } 
 
     private customFilter(user: UserModel, searchText: string): boolean {
         if (!searchText) return true
