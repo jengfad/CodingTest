@@ -6,11 +6,13 @@ import { PagedUsersParams, UserQuery } from ".";
 import { UserApiService } from "../../services";
 import { PagedUsersEntityService } from "./user.entity.service";
 import { UserStore } from "./user.store";
+import { UserApiMockService } from "../../mock/user-api-mock.service";
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
     constructor(
-        private api: UserApiService,
+        // private api: UserApiService,
+        private api: UserApiMockService,
         private store: UserStore,
         private pagedUsersEntity: PagedUsersEntityService
     ) {}

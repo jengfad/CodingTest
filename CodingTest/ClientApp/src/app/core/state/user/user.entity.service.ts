@@ -4,13 +4,15 @@ import { PagedUsersModel } from "src/app/shared/models";
 import { BaseEntityService } from "src/app/shared/state";
 import { PagedUsersParams, PagedUsersView, UserQuery, UserStore } from ".";
 import { UserApiService } from "../../services";
+import { UserApiMockService } from "../../mock/user-api-mock.service";
 
 @Injectable({ providedIn: 'root' })
 export class PagedUsersEntityService extends BaseEntityService<PagedUsersParams, PagedUsersView, PagedUsersModel> {
     constructor(
         protected store: UserStore,
         protected stateQuery: UserQuery,
-        private api: UserApiService) {
+        // private api: UserApiService,
+        private api: UserApiMockService) {
           super(stateQuery.pagedUsersQuery, store.pagedUsers);
     }
 

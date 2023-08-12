@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
 import { Observable, of } from "rxjs";
+import { UserApiMockService } from "src/app/core/mock/user-api-mock.service";
 import { UserApiService } from "src/app/core/services";
 import { UserModel } from "src/app/shared/models";
 
@@ -9,7 +10,8 @@ import { UserModel } from "src/app/shared/models";
 })
 export class UserFormResolver implements Resolve<UserModel> {
     constructor(
-        private userApi: UserApiService
+        private userApi: UserApiMockService
+        // private userApi: UserApiService
     ) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<null> | Observable<UserModel> {

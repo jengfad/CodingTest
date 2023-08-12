@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, takeUntil, tap } from 'rxjs';
+import { UserApiMockService } from 'src/app/core/mock/user-api-mock.service';
 import { DialogService, UserApiService } from 'src/app/core/services';
 import { UserService } from 'src/app/core/state/user/user.service';
 import { AppConstants } from 'src/app/shared/app-constants';
@@ -32,6 +33,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   
   constructor(
     private userApi: UserApiService,
+    private mockApi: UserApiMockService,
 		private dialogService: DialogService,
     private userService: UserService,
     private fb: UntypedFormBuilder,
@@ -64,7 +66,7 @@ export class UserFormComponent extends BaseFormComponent implements OnInit {
   private initForm(): void {
     const emailValidators = !this.isEdit ? [
       [Validators.required, EmailFormatValidator.validate], 
-      [UniqueEmailValidator.createValidator(this.userApi, this.isEdit)]
+      [UniqueEmailValidator.createValidator(this.mockApi, this.isEdit)]
     ] : [];
     this.formGroup = this.fb.group({
       firstName: [null, [Validators.required]],
